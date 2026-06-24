@@ -1,0 +1,6 @@
+{
+  "name": "Quick Volume Control",
+  "description": "An application that allows users to adjust device volume levels directly from a persistent notification without using physical volume buttons.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

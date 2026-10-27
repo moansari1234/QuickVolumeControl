@@ -31,7 +31,7 @@ tap resource-id='.*app_name_text' text='Quick Volume Control'; sleep 2; shot pan
 check "tapping the notification opens volume panel" "screen_has 'Volume Controls'" "saw: $(texts)"
 tap text='Volume Controls'; sleep 1; shot panel-tap-inside
 check "tap inside the card keeps panel open" "screen_has 'Volume Controls'" "panel closed"
-adb shell input tap 540 60; sleep 2; shot panel-tap-outside
+adb shell input tap 540 250; sleep 2; shot panel-tap-outside
 check "tap outside closes panel" "! screen_has 'Volume Controls'" "panel still open"
 R=$(adb shell am start -n $PKG/com.example.VolumePanelActivity 2>&1)
 check "other apps cannot launch VolumePanelActivity" "echo '$R' | grep -qi 'denial\|not exported\|SecurityException'" "launched: $R"

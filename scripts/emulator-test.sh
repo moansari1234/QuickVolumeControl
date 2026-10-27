@@ -1,7 +1,7 @@
 #!/bin/bash
 # Emulator test for QuickVolumeControl: install the debug APK and drive it like a user.
 source scripts/emulator-lib.sh
-PKG=com.aistudio.quickvolume.vbnmzx
+PKG=com.aistudio.quickvolume.vbnmzx.debug  # debug builds carry the .debug suffix
 vol(){ adb shell cmd media_session volume --stream 3 --get 2>/dev/null | grep -o 'volume is [0-9]*' | grep -o '[0-9]*$'; }
 muted(){ adb shell dumpsys audio | grep -A3 '^- STREAM_MUSIC:' | grep -q 'Muted: true'; }
 adb install -r app/build/outputs/apk/debug/app-debug.apk

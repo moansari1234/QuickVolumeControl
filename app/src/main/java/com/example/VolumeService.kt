@@ -15,7 +15,13 @@ class VolumeService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        isRunning = true
         createNotificationChannel()
+    }
+
+    override fun onDestroy() {
+        isRunning = false
+        super.onDestroy()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -76,5 +82,9 @@ class VolumeService : Service() {
 
     companion object {
         const val CHANNEL_ID = "volume_control_channel"
+
+        /** Replaces the deprecated ActivityManager.getRunningServices scan; same process only. */
+        @Volatile var isRunning = false
+            private set
     }
 }

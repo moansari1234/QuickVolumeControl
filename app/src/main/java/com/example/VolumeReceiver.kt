@@ -24,12 +24,8 @@ class VolumeReceiver : BroadcastReceiver() {
             }
             ACTION_MUTE -> {
                 try {
-                    val isMuted = audioManager.getStreamVolume(streamType) == 0
-                    if (isMuted) {
-                        audioManager.adjustStreamVolume(streamType, AudioManager.ADJUST_UNMUTE, AudioManager.FLAG_SHOW_UI)
-                    } else {
-                        audioManager.adjustStreamVolume(streamType, AudioManager.ADJUST_MUTE, AudioManager.FLAG_SHOW_UI)
-                    }
+                    // Let the system track mute state; a volume of 0 is not the same as muted.
+                    audioManager.adjustStreamVolume(streamType, AudioManager.ADJUST_TOGGLE_MUTE, AudioManager.FLAG_SHOW_UI)
                 } catch (e: SecurityException) { }
             }
         }

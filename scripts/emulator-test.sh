@@ -29,6 +29,16 @@ adb shell cmd statusbar expand-notifications; sleep 1
 # The 4th action only shows in the expanded notification; the system chevron is also labelled "Expand"
 tap resource-id='(?!.*expand_button).*' content-desc=Expand || { tap resource-id='.*expand_button'; shot shade-expanded; tap resource-id='(?!.*expand_button).*' content-desc=Expand; }
 sleep 2; shot panel
+info(){ RESULTS="$RESULTS%0AINFO  $1"; }
+adb shell cmd statusbar expand-notifications; sleep 1; dump
+info "shade nodes: $(python3 -c "
+import xml.etree.ElementTree as E
+print(' | '.join(f\"{n.get('resource-id','').split('/')[-1]}:{n.get('content-desc') or n.get('text')}\" for n in E.parse('ui.xml').iter('node') if n.get('package')=='com.android.systemui' and (n.get('content-desc') or n.get('text')) and ('action' in n.get('resource-id','') or 'expand' in n.get('resource-id','') or n.get('text') in ('Volume Control','Quick Volume Control'))))
+")"
+adb shell am start -W -n com.aistudio.quickvolume.vbnmzx/com.example.MainActivity >/dev/null; adb shell cmd statusbar expand-notifications; sleep 1
+tap resource-id='(?!.*expand_button).*' content-desc=Expand && info "tapped Expand action" || info "Expand action not found"
+sleep 2; info "resumed: $(adb shell dumpsys activity activities | grep -m1 'topResumedActivity\|mResumedActivity' | tr -s ' ')"
+info "logcat: $(adb logcat -d | grep -i 'VolumePanel\|BAL_BLOCK\|Background activity launch\|blocked' | tail -3 | tr '\n' ' ' | cut -c1-400)"
 check "Expand opens volume panel" "screen_has 'Volume Controls'" "saw: $(texts)"
 tap text='Volume Controls'; sleep 1; shot panel-tap-inside
 check "tap inside the card keeps panel open" "screen_has 'Volume Controls'" "panel closed"

@@ -35,9 +35,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         
-        // Simple way to check if service is running could be implemented here,
-        // for now we'll rely on the user toggling it.
-        
         setContent {
             MyApplicationTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -59,18 +56,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        isServiceRunning = isVolumeServiceRunning()
-    }
-
-    private fun isVolumeServiceRunning(): Boolean {
-        val manager = getSystemService(android.content.Context.ACTIVITY_SERVICE) as android.app.ActivityManager
-        @Suppress("DEPRECATION")
-        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
-            if (VolumeService::class.java.name == service.service.className) {
-                return true
-            }
-        }
-        return false
+        isServiceRunning = VolumeService.isRunning
     }
 
     private fun checkPermissionAndStartService() {
@@ -232,13 +218,5 @@ fun MainScreen(
             }
         }
         
-        Spacer(modifier = Modifier.weight(1f))
-        
-        Button(
-            onClick = { /* Open Settings or advanced features in the future */ },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Settings")
-        }
     }
 }

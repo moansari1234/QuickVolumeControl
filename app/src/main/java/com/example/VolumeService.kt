@@ -15,7 +15,13 @@ class VolumeService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        isRunning = true
         createNotificationChannel()
+    }
+
+    override fun onDestroy() {
+        isRunning = false
+        super.onDestroy()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -64,7 +70,13 @@ class VolumeService : Service() {
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_volume_up)
+            .setContentTitle("Volume controls")
+            .setContentText("Tap for all volume sliders")
             .setOngoing(true)
+            // On Android 13+ the shade renders only the 3 compact actions of this MediaStyle
+            // notification (verified on an API 35 emulator), so "Expand" was unreachable.
+            // Tapping the notification itself now opens the panel.
+            .setContentIntent(expandPendingIntent)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .addAction(R.drawable.ic_volume_down, "Down", volDownPendingIntent)
             .addAction(R.drawable.ic_volume_off, "Mute", mutePendingIntent)
@@ -76,5 +88,9 @@ class VolumeService : Service() {
 
     companion object {
         const val CHANNEL_ID = "volume_control_channel"
+
+        /** Replaces the deprecated ActivityManager.getRunningServices scan; same process only. */
+        @Volatile var isRunning = false
+            private set
     }
 }

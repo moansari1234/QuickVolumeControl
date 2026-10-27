@@ -70,6 +70,8 @@ class VolumeService : Service() {
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_volume_up)
+            .setContentTitle("Volume controls")
+            .setContentText("Tap for all volume sliders")
             .setOngoing(true)
             // On Android 13+ the shade renders only the 3 compact actions of this MediaStyle
             // notification (verified on an API 35 emulator), so "Expand" was unreachable.

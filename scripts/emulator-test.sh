@@ -33,7 +33,10 @@ info "after notification tap, resumed: $(adb shell dumpsys activity activities |
 check "tapping the notification opens volume panel" "screen_has 'Volume Controls'" "saw: $(texts)"
 tap text='Volume Controls'; sleep 1; shot panel-tap-inside
 check "tap inside the card keeps panel open" "screen_has 'Volume Controls'" "panel closed"
-adb shell input tap 540 250; sleep 2; shot panel-tap-outside
+# Tap halfway between the top of the screen and the card's title (screen size varies by emulator profile)
+dump; TOP=$(grep -o 'text="Volume Controls"[^>]*bounds="\[[0-9]*,[0-9]*' ui.xml | grep -o '[0-9]*$')
+info "screen $(adb shell wm size | grep -o '[0-9]*x[0-9]*'), title top y=$TOP, tapping y=$((TOP/2))"
+adb shell input tap 100 $((TOP/2)); sleep 2; shot panel-tap-outside
 check "tap outside closes panel" "! screen_has 'Volume Controls'" "panel still open"
 R=$(adb shell am start -n $PKG/com.example.VolumePanelActivity 2>&1)
 check "other apps cannot launch VolumePanelActivity" "echo '$R' | grep -qi 'denial\|not exported\|SecurityException'" "launched: $R"

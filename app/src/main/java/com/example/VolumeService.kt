@@ -71,6 +71,10 @@ class VolumeService : Service() {
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_volume_up)
             .setOngoing(true)
+            // On Android 13+ the shade renders only the 3 compact actions of this MediaStyle
+            // notification (verified on an API 35 emulator), so "Expand" was unreachable.
+            // Tapping the notification itself now opens the panel.
+            .setContentIntent(expandPendingIntent)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .addAction(R.drawable.ic_volume_down, "Down", volDownPendingIntent)
             .addAction(R.drawable.ic_volume_off, "Mute", mutePendingIntent)

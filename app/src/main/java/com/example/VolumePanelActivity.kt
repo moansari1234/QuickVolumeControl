@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -41,7 +42,11 @@ class VolumePanelActivity : ComponentActivity() {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth(0.9f)
-                            .clickable(enabled = false) {}, // Prevent closing when clicking inside card
+                            // A disabled clickable doesn't consume taps, so they fell through and closed the panel.
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) {},
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                     ) {
@@ -122,12 +127,13 @@ fun VolumeSliderRow(
             Slider(
                 value = currentVolume,
                 onValueChange = { newValue ->
-                    currentVolume = newValue
                     try {
                         audioManager.setStreamVolume(streamType, newValue.toInt(), 0)
                     } catch (e: SecurityException) {
-                        // User needs to grant Do Not Disturb permission
+                        // Ring/notification changes into silent need Do Not Disturb access
                     }
+                    // Show what the system actually applied, not what was requested
+                    currentVolume = audioManager.getStreamVolume(streamType).toFloat()
                 },
                 valueRange = 0f..maxVolume.toFloat(),
                 steps = if (maxVolume > 0) maxVolume - 1 else 0

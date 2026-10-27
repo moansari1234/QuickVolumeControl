@@ -18,6 +18,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.example.ui.theme.MyApplicationTheme
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.Icons
+import com.example.update.UpdatePrompt
+import com.example.update.SettingsActivity
 
 class MainActivity : ComponentActivity() {
 
@@ -36,21 +40,29 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         
         setContent {
-            MyApplicationTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MainScreen(
-                        isServiceRunning = isServiceRunning,
-                        onToggleService = { enable ->
-                            if (enable) {
-                                checkPermissionAndStartService()
-                            } else {
-                                stopVolumeService()
-                            }
-                        },
-                        modifier = Modifier.padding(innerPadding)
-                    )
+            MyApplicationTheme { Box(Modifier.fillMaxSize()) {
+                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                        MainScreen(
+                            isServiceRunning = isServiceRunning,
+                            onToggleService = { enable ->
+                                if (enable) {
+                                    checkPermissionAndStartService()
+                                } else {
+                                    stopVolumeService()
+                                }
+                            },
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
+                // Settings: app updates from GitHub releases
+                IconButton(
+                    onClick = { startActivity(Intent(this@MainActivity, SettingsActivity::class.java)) },
+                    modifier = Modifier.align(Alignment.TopEnd).statusBarsPadding().padding(4.dp)
+                ) {
+                    Icon(Icons.Default.Settings, contentDescription = "Settings", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-            }
+                UpdatePrompt()
+            } }
         }
     }
 

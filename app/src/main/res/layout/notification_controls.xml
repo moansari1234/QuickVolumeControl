@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One row, four buttons. Used for both the collapsed and expanded notification,
+     so every control stays reachable when the shade is minimised. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageButton
+        android:id="@+id/btn_up"
+        style="@style/NotificationButton"
+        android:contentDescription="Up"
+        android:src="@drawable/ic_volume_up" />
+
+    <ImageButton
+        android:id="@+id/btn_down"
+        style="@style/NotificationButton"
+        android:contentDescription="Down"
+        android:src="@drawable/ic_volume_down" />
+
+    <ImageButton
+        android:id="@+id/btn_mute"
+        style="@style/NotificationButton"
+        android:contentDescription="Mute"
+        android:src="@drawable/ic_volume_off" />
+
+    <ImageButton
+        android:id="@+id/btn_advanced"
+        style="@style/NotificationButton"
+        android:contentDescription="Advanced"
+        android:src="@drawable/ic_expand" />
+</LinearLayout>

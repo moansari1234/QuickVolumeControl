@@ -10,4 +10,14 @@
         <item name="android:windowIsFloating">false</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+
+    <!-- Notification row buttons: equal width, ripple, icon tinted to the shade's text colour (light or dark). -->
+    <style name="NotificationButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:tint">?android:attr/textColorPrimary</item>
+    </style>
 </resources>

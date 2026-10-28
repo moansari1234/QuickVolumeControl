@@ -5,7 +5,7 @@
 
   Control your phone's volume from a notification, without touching the volume buttons.
 
-  [![Download APK](https://img.shields.io/badge/Download-APK-3D5AFE?style=for-the-badge&logo=android&logoColor=white)](https://github.com/moansari1234/QuickVolumeControl/releases/latest/download/QuickVolumeControl-release.apk)
+  [![Download APK](https://img.shields.io/badge/Download-APK-3D5AFE?style=for-the-badge&logo=android&logoColor=white)](https://github.com/moansari1234/QuickVolumeControl/releases/latest/download/QuickVolumeControl.apk)
   [![Debug APK](https://img.shields.io/badge/Debug-APK-555555?style=for-the-badge&logo=android&logoColor=white)](https://github.com/moansari1234/QuickVolumeControl/releases/latest/download/QuickVolumeControl-debug.apk)
   [![Latest release](https://img.shields.io/github/v/release/moansari1234/QuickVolumeControl?style=for-the-badge)](https://github.com/moansari1234/QuickVolumeControl/releases/latest)
 </div>
@@ -19,7 +19,7 @@
 
 ## Install
 
-1. Download **[QuickVolumeControl-release.apk](https://github.com/moansari1234/QuickVolumeControl/releases/latest/download/QuickVolumeControl-release.apk)** on your phone.
+1. Download **[QuickVolumeControl.apk](https://github.com/moansari1234/QuickVolumeControl/releases/latest/download/QuickVolumeControl.apk)** on your phone.
 2. Open it. If Android asks, allow your browser or file manager to **install unknown apps**.
 3. Open **Quick Volume Control**, turn the switch on and allow notifications.
 
@@ -29,7 +29,7 @@ Requires Android 7.0 (API 24) or newer.
 
 | APK | Use it for | Package |
 | --- | --- | --- |
-| `QuickVolumeControl-release.apk` | Everyday use. Minified, about 1 MB. | `com.aistudio.quickvolume.vbnmzx` |
+| `QuickVolumeControl.apk` | Everyday use. Minified, about 1 MB. | `com.aistudio.quickvolume.vbnmzx` |
 | `QuickVolumeControl-debug.apk` | Testing and bug reports. Installs next to the release build. | `com.aistudio.quickvolume.vbnmzx.debug` |
 
 Each release also lists `SHA256SUMS.txt` so you can check a download.

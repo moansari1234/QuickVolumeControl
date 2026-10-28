@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 
 class VolumeService : Service() {
@@ -68,21 +69,26 @@ class VolumeService : Service() {
         }
         val expandPendingIntent = PendingIntent.getActivity(this, 4, expandIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
+        // A custom one-row view instead of notification actions: Android shows at most 3 actions
+        // when a notification is collapsed, which hid "Advanced". The same row is used collapsed
+        // and expanded, so Up, Down, Mute and Advanced are always one tap away.
+        val row = RemoteViews(packageName, R.layout.notification_controls).apply {
+            setOnClickPendingIntent(R.id.btn_up, volUpPendingIntent)
+            setOnClickPendingIntent(R.id.btn_down, volDownPendingIntent)
+            setOnClickPendingIntent(R.id.btn_mute, mutePendingIntent)
+            setOnClickPendingIntent(R.id.btn_advanced, expandPendingIntent)
+        }
+
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_volume_up)
             .setContentTitle("Volume controls")
             .setContentText("Tap for all volume sliders")
             .setOngoing(true)
-            // On Android 13+ the shade renders only the 3 compact actions of this MediaStyle
-            // notification (verified on an API 35 emulator), so "Expand" was unreachable.
-            // Tapping the notification itself now opens the panel.
             .setContentIntent(expandPendingIntent)
             .setPriority(NotificationCompat.PRIORITY_LOW)
-            .addAction(R.drawable.ic_volume_down, "Down", volDownPendingIntent)
-            .addAction(R.drawable.ic_volume_off, "Mute", mutePendingIntent)
-            .addAction(R.drawable.ic_volume_up, "Up", volUpPendingIntent)
-            .addAction(R.drawable.ic_expand, "Expand", expandPendingIntent)
-            .setStyle(androidx.media.app.NotificationCompat.MediaStyle().setShowActionsInCompactView(0, 1, 2))
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setCustomContentView(row)
+            .setCustomBigContentView(row)
             .build()
     }
 

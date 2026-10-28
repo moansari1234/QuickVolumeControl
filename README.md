@@ -14,8 +14,7 @@
 
 - **Persistent notification** with **Volume down**, **Mute / unmute** and **Volume up** buttons for media volume.
 - **Tap the notification** to open a full panel with sliders for media, ring, alarm and notification volume. Tap outside the panel to close it.
-- **Built-in updates** from GitHub: the app checks for a new release (at most twice a day, can be turned off) and installs it in two taps.
-- Small and private: about 1 MB, no ads, no tracking, no analytics. The only network request is the update check to GitHub.
+- Small and private: about 1 MB, no ads, no tracking, no analytics. No internet permission at all: the app never goes online.
 
 ## Install
 
@@ -36,17 +35,13 @@ Each release also lists `SHA256SUMS.txt` so you can check a download.
 
 ## Updating
 
-Open the app and tap the **gear icon** (top right) → **Check for updates** → **Update to vX.Y.Z**, then confirm on Android's install screen. The first time, Android asks you to allow the app to install updates.
-
-With **Check for updates automatically** on, the app looks for a new version when it opens (at most every 12 hours) and offers it in a dialog. Release builds update from the release APK, debug builds from the debug APK.
+Open the app, tap the **gear icon** (top right) → **Download latest version**. That opens the [latest release](https://github.com/moansari1234/QuickVolumeControl/releases/latest) in your browser; download `QuickVolumeControl.apk` and install it over the old one. Your settings stay.
 
 ## Permissions
 
 | Permission | Why |
 | --- | --- |
 | Notifications, foreground service | Keep the volume notification visible |
-| Internet | Check GitHub for updates and download them |
-| Install packages | Hand a downloaded update to Android's installer (you always confirm) |
 
 ## Build from source
 
@@ -67,13 +62,13 @@ Push a tag, or run the **Release** workflow from the Actions tab with a version 
 git tag v1.0.1 && git push origin v1.0.1
 ```
 
-The workflow builds both APKs, signs them and publishes the GitHub release that the in-app updater reads. Versions must be `X.Y.Z`; the version code is derived from it, so every release must be higher than the last.
+The workflow builds both APKs, signs them and publishes the GitHub release. Versions must be `X.Y.Z`; the version code is derived from it, so every release must be higher than the last.
 
 **Signing.** Updates only install over an app signed with the same key. Published APKs are signed with a private key in `keystore/release.p12`, encrypted with a random password kept only in the `SIGNING_PASSWORD` Actions secret, so nobody else can sign an update. Certificate SHA-256: `C1:BB:3B:B9:16:EC:73:63:A4:E9:15:CC:E4:B7:73:39:00:17:5D:A0:B3:E1:7B:77:5D:AA:FF:A8:13:25:0D:DA`. Local builds without that secret use the standard Android debug key and won't update a published install. APKs from v1.0.x used an old public key: uninstall them once before installing v1.1.0 or later.
 
 ## Testing
 
-The **Emulator test** workflow boots an Android 15 emulator, installs the debug APK and drives it like a user (`scripts/emulator-test.sh`): starts the service, taps each notification button and checks the real volume and mute state, opens and closes the panel, and confirms other apps cannot open the panel. Run it with an **old version** (for example `0.9.0`) to test the updater end to end (`scripts/update-test.sh`).
+The **Emulator test** workflow boots an Android 15 emulator, installs the debug APK and drives it like a user (`scripts/emulator-test.sh`): starts the service, taps each notification button and checks the real volume and mute state, opens and closes the panel, and confirms other apps cannot open the panel.
 
 ## Project layout
 
@@ -83,5 +78,4 @@ app/src/main/java/com/example/
   VolumeService.kt         foreground service and notification
   VolumeReceiver.kt        notification button actions
   VolumePanelActivity.kt   volume sliders panel
-  update/                  GitHub updater, Settings screen, install receiver
 ```

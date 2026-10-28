@@ -20,8 +20,6 @@ import androidx.core.content.ContextCompat
 import com.example.ui.theme.MyApplicationTheme
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.Icons
-import com.example.update.UpdatePrompt
-import com.example.update.SettingsActivity
 
 class MainActivity : ComponentActivity() {
 
@@ -54,14 +52,13 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.padding(innerPadding)
                         )
                     }
-                // Settings: app updates from GitHub releases
+                // About: version and a link to download the latest APK
                 IconButton(
                     onClick = { startActivity(Intent(this@MainActivity, SettingsActivity::class.java)) },
                     modifier = Modifier.align(Alignment.TopEnd).statusBarsPadding().padding(4.dp)
                 ) {
-                    Icon(Icons.Default.Settings, contentDescription = "Settings", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Icon(Icons.Default.Settings, contentDescription = "About", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                UpdatePrompt()
             } }
         }
     }

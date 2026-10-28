@@ -7,6 +7,7 @@ muted(){ adb shell dumpsys audio | grep -A3 '^- STREAM_MUSIC:' | grep -q 'Muted:
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 adb shell pm grant $PKG android.permission.POST_NOTIFICATIONS
 adb shell am start -W -n $PKG/com.example.MainActivity; sleep 3; shot main
+check "no network or install permissions" "! adb shell dumpsys package $PKG | grep -q 'android.permission.INTERNET\\|android.permission.REQUEST_INSTALL_PACKAGES'" "permission still declared"
 check "main screen shows inactive service" "screen_has 'Service is Inactive'" "saw: $(texts)"
 tap checkable=true; sleep 2; shot service-on
 check "switch starts VolumeService" "adb shell dumpsys activity services $PKG | grep -q VolumeService" "service not running"

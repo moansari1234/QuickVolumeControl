@@ -86,6 +86,8 @@ class VolumeService : Service() {
             .setOngoing(true)
             .setContentIntent(expandPendingIntent)
             .setPriority(NotificationCompat.PRIORITY_LOW)
+            // Custom views aren't actions, so ask Android 12+ to show the notification without its 10 s delay.
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomContentView(row)
             .setCustomBigContentView(row)

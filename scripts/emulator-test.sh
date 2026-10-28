@@ -13,7 +13,7 @@ check "switch starts VolumeService" "adb shell dumpsys activity services $PKG | 
 check "main screen shows active service" "screen_has 'Service is Active'" "saw: $(texts)"
 adb shell cmd media_session volume --stream 3 --set 5; sleep 1
 adb shell cmd statusbar expand-notifications; sleep 2; shot shade
-check "notification has Up/Down/Mute actions" "screen_has 'Up' && screen_has 'Mute' && screen_has 'Down'" "actions missing"
+check "notification row has Up/Down/Mute/Advanced" "screen_has 'Up' && screen_has 'Mute' && screen_has 'Down' && screen_has 'Advanced'" "saw: \$(texts)"
 tap resource-id='(?!.*expand_button).*' content-desc=Up; V=$(vol)
 check "Up raises media volume 5 -> 6" "[ '$V' = 6 ]" "got $V"
 adb shell cmd statusbar expand-notifications; sleep 1
@@ -26,11 +26,11 @@ adb shell cmd statusbar expand-notifications; sleep 1
 tap resource-id='(?!.*expand_button).*' content-desc=Mute; sleep 1
 check "Mute again unmutes" "! muted" "still muted"
 adb shell cmd statusbar expand-notifications; sleep 1
-# Tapping the notification body opens the panel (the 4th "Expand" action is not rendered on Android 13+)
+# The 4th button ("Advanced") opens the full volume panel
 info(){ RESULTS="$RESULTS%0AINFO  $1"; }
-tap text='Tap for all volume sliders' || info "notification text not found"; sleep 2; shot panel
+tap resource-id='(?!.*expand_button).*' content-desc=Advanced; sleep 2; shot panel
 info "after notification tap, resumed: $(adb shell dumpsys activity activities | grep -m1 topResumedActivity | grep -o '[^ /]*/[^ ]*')"
-check "tapping the notification opens volume panel" "screen_has 'Volume Controls'" "saw: $(texts)"
+check "Advanced button opens volume panel" "screen_has 'Volume Controls'" "saw: $(texts)"
 tap text='Volume Controls'; sleep 1; shot panel-tap-inside
 check "tap inside the card keeps panel open" "screen_has 'Volume Controls'" "panel closed"
 # Tap halfway between the top of the screen and the card's title (screen size varies by emulator profile)

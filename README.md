@@ -69,7 +69,7 @@ git tag v1.0.1 && git push origin v1.0.1
 
 The workflow builds both APKs, signs them and publishes the GitHub release that the in-app updater reads. Versions must be `X.Y.Z`; the version code is derived from it, so every release must be higher than the last.
 
-**Signing.** Updates only install over an app signed with the same key. Builds use the key in `keystore/` unless the repository secrets `KEYSTORE_B64`, `STORE_PASSWORD`, `KEY_ALIAS` and `KEY_PASSWORD` are set, in which case that private key is used. Switching keys means uninstalling once.
+**Signing.** Updates only install over an app signed with the same key. Published APKs are signed with a private key in `keystore/release.p12`, encrypted with a random password kept only in the `SIGNING_PASSWORD` Actions secret, so nobody else can sign an update. Certificate SHA-256: `C1:BB:3B:B9:16:EC:73:63:A4:E9:15:CC:E4:B7:73:39:00:17:5D:A0:B3:E1:7B:77:5D:AA:FF:A8:13:25:0D:DA`. Local builds without that secret use the standard Android debug key and won't update a published install. APKs from v1.0.x used an old public key: uninstall them once before installing v1.1.0 or later.
 
 ## Testing
 
